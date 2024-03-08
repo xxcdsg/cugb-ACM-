@@ -388,6 +388,9 @@ int main()
 
 ## [P6175 无向图的最小环问题](https://www.luogu.com.cn/problem/P6175)
 
+* 对Floyd原理的考察，最外层是中间点，每次循环一次，就给这个矩阵更新为考虑一个点加入图中的所有点到点的最短边
+* 那么在加入这个点之前，我们 $dis[i][j]$ 所代表的边是不包含点 $k$ 的，那么再通过求 $dis[i][j] + d[i][k] + d[k][j](i\neq j\neq k)$ ，就是一个至少包含三个点的环
+
 ```cpp
 // xxc
 #include<bits/stdc++.h>
@@ -437,8 +440,6 @@ int main(){
 	}
 }
 ```
-
-
 
 ## [P3366 【模板】最小生成树](https://www.luogu.com.cn/problem/P3366)
 
@@ -497,3 +498,4 @@ int main(){
 		cout << ans << endl;
 }
 ```
+

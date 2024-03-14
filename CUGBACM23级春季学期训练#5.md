@@ -268,6 +268,7 @@ int main(){
 * 因此从字符串数组中选任意一个或者不选，接在我们的字符串上
 * 问要得到目标字符串最少需要选多少个字符串拼接
 * 因为数据范围很小，分组背包即可
+* 注意分组背包时不仅要把vis分开，还需要将dis分开
 
 ```cpp
 // xxc
@@ -282,21 +283,25 @@ using namespace std;
 const int N = 1e2 + 10;
 
 bool vis[2][N];
-int dis[N];
+int dis[2][N];
 
 void test(){
 	string aim;
 	cin >> aim;
 	int len = aim.size();
-	for(int i = 1;i <= len;i++) dis[i] = 99999;
+	for(int k = 0;k <= 1;k++)
+		for(int i = 1;i <= len;i++) dis[k][i] = 99999;
 	int n;cin >> n;
 	int op = 0;
 	vis[1][0] = vis[0][0] = 1;
 	for(int i = 1;i <= n;i++){
-		for(int j = 0;j <= len;j++)
+		for(int j = 0;j <= len;j++){
 			vis[op][j] = vis[1 - op][j];
+			dis[op][j] = dis[1 - op][j];
+		}
+			
 		int m;cin >> m;
-		for(int j = 1;j <= m;j++){
+		for(int j = m;j >= 1;j--){
 			string s;cin >> s;
 			int len2 = s.size();
 			for(int k = 0;k <= len - len2;k++){
@@ -307,13 +312,13 @@ void test(){
 				}
 				if(f){
 					vis[1 - op][k + len2] = 1;
-					dis[k + len2] = min(dis[k] + 1,dis[k + len2]);
+					dis[1 - op][k + len2] = min(dis[op][k] + 1,dis[1 - op][k + len2]);
 				}
 			}
 		}
 	}
-	if(dis[len] != 99999){
-		cout << dis[len] << '\n';
+	if(dis[1][len] != 99999){
+		cout << dis[1][len] << '\n';
 	}else
 		cout << -1 << '\n';
 }
